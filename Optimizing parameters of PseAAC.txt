@@ -5,8 +5,8 @@ library(Interpol)
 library(protr)
 library(seqinr)
 
-x <- read.fasta('AHTP2132.fasta', seqtype="AA", as.string = TRUE)
-D = read.csv("Label all.csv", header = TRUE) 
+x <- read.fasta('pentaall.fasta', seqtype="AA", as.string = TRUE)
+D = read.csv("class_pentapeptide.csv", header = TRUE) 
 
 lam = 3
 error  <- matrix(nrow = lam, ncol = 1)
