@@ -1,4 +1,4 @@
-setwd('D:\\Peptide prediction\\Antihypertensive peptides\\CLassification\\Backup')
+setwd('D:\\Peptide prediction\\Antihypertensive peptides\\CLassification\\AHTP')
 library(caret)
 library(randomForest)
 library(Interpol)
@@ -21,22 +21,10 @@ D = read.csv("Label all.csv", header = TRUE)
 m = length(x)
 aac <- t(sapply(x, extractAAC))
 dpc <- t(sapply(x, extractDC))
-data = data.frame(aac,paac,Class = D[,ncol(D)])
+data = data.frame(aac,dpc,Class = D[,ncol(D)])
 Pos = subset(data, Class == 'AHTP')
 Neg = subset(data, Class == 'nonAHTP')
 cross = 10
-
-for (i in 1:m){
-#######  Dividing Training and Testing sets on positive and negative classes
-sample1 <- c(sample(1:1066 ,800))
-sample2 <- c(sample(1:1066,800))
-  train1  <- Pos[sample1,] ####Positive set for training
-  train2  <- Neg[sample2,] ####Negative set for training
-  test1 <-   Pos[-sample1,]    ####Positive set for testing
-  test2 <-   Neg[-sample2,]    ####Negative set for testing 
-  internal <- rbind(train1,train2) ####combining for internal set
-  external <- rbind(test1,test2)    ####combining for external set
-
 ###############################customRF
 customRF <- list(type = "Classification", library = "randomForest", loop = NULL)
 customRF$parameters <- data.frame(parameter = c("mtry", "ntree"), class = rep("numeric", 2), label = c("mtry", "ntree"))
@@ -50,6 +38,18 @@ customRF$prob <- function(modelFit, newdata, preProc = NULL, submodels = NULL)
    predict(modelFit, newdata, type = "prob")
 customRF$sort <- function(x) x[order(x[,1]),]
 customRF$levels <- function(x) x$classes
+
+for (i in 1:m){
+#######  Dividing Training and Testing sets on positive and negative classes
+sample1 <- c(sample(1:1066 ,800))
+sample2 <- c(sample(1:1066,800))
+  train1  <- Pos[sample1,] ####Positive set for training
+  train2  <- Neg[sample2,] ####Negative set for training
+  test1 <-   Pos[-sample1,]    ####Positive set for testing
+  test2 <-   Neg[-sample2,]    ####Negative set for testing 
+  internal <- rbind(train1,train2) ####combining for internal set
+  external <- rbind(test1,test2)    ####combining for external set
+
 ######### Optimized parameter
 control <- trainControl(method="repeatedcv", number=10, repeats=3)
 tunegrid <- expand.grid(.mtry=c(1:10), .ntree=c(100,200,300,400,500))
@@ -100,6 +100,3 @@ average[,i] = mean(result[,i])
 std[,i] = sd(result[,i])
 }
 finalRE = t(rbind(average,std))      
-
-
-
