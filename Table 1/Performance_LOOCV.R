@@ -6,6 +6,7 @@ library(randomForest)
 library(protr)
 library(seqinr)
 library(Interpol)
+library(pls)
 
 ##### Set parameter for PseAAC
 para1 = 2
