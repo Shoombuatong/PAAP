@@ -51,7 +51,7 @@ sample2 <- c(sample(1:1066,800))
   external <- rbind(test1,test2)    ####combining for external set
 
 ######### Optimized parameter
-control <- trainControl(method="repeatedcv", number=10, repeats=3)
+control <- trainControl(method="cv", number=10)
 tunegrid <- expand.grid(.mtry=c(1:10), .ntree=c(100,200,300,400,500))
 custom <- train(Class~., data=internal , method=customRF, metric=c("Accuracy"), tuneGrid=tunegrid, trControl=control)
 
