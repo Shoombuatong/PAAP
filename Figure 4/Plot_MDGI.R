@@ -19,13 +19,13 @@ internal = data.frame(aac,Class = D[,ncol(D)])
 ind= c(2,3,5,7,9,11,13,15,17,20)
 n = ncol(internal)-1
 gini = matrix(nrow = n, ncol = 10)
-meangini = matrix(nrow = 400, ncol = 1)
+meangini = matrix(nrow = 20, ncol = 1)
 
 for (i in 1:10){
 RF<-randomForest(Class~.,data=internal,ntree=100,mtry=ind[i],importance=TRUE)
 gini[,i] = RF$ importance[,4]
 }
 
-for (i in 1:400){
+for (i in 1:20){
 meangini[i,] = mean(gini[i,])
 }
