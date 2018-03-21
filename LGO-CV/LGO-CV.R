@@ -1,4 +1,4 @@
-setwd('D:\\Peptide prediction\\Antihypertensive peptides\\CLassification\\Backup')
+setwd('D:\\Peptide prediction\\Antihypertensive peptides\\CLassification\\AHTP')
 library(caret)
 library(randomForest)
 library(Interpol)
@@ -23,10 +23,9 @@ external <- data2[,index]
 
 
 ######### Optimized parameter
-control <- trainControl(method="repeatedcv", number=10, repeats=3)
+control <- trainControl(method="cv", number=5)
 tunegrid <- expand.grid(.mtry=c(1:10), .ntree=c(100,200,300,400,500))
 custom <- train(Class~., data=internal , method=customRF, metric=c("Accuracy"), tuneGrid=tunegrid, trControl=control)
 ######Loop for 10-fold CV
 RF = randomForest(Class ~ ., internal, ntree= as.numeric(custom$ bestTune[2]),mtry = as.numeric(custom$ bestTune[1]) ,orm.votes=TRUE,keep.forest=TRUE, importance=TRUE) ## Building RF on internal with the optimized parameter
 predcv = table(external$Class, predict(RF, external))  ###### Prediction on external set
-
