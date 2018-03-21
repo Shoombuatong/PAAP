@@ -1,5 +1,5 @@
 #######set directory
-setwd('D:\\Peptide prediction\\Antihypertensive peptides\\CLassification')
+setwd('D:\\Peptide prediction\\Antihypertensive peptides\\CLassification\\Backup')
 #######Load package
 library(caret)
 library(randomForest)
@@ -29,3 +29,4 @@ gini[,i] = RF$ importance[,4]
 for (i in 1:20){
 meangini[i,] = mean(gini[i,])
 }
+
